@@ -1,0 +1,74 @@
+.Container {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	min-height: 200px;
+	align-items: center;
+
+	line-height: 0 !important;
+	padding: 20px 20px 0px 20px;
+
+	position: fixed;
+	z-index: 5;
+}
+
+.Transparent {
+	background: linear-gradient(
+		180deg,
+		#000000 0%,
+		rgba(0, 0, 0, 0.5) 50%,
+		rgba(0, 0, 0, 0) 100%
+	);
+}
+
+.Blacked {
+	background-color: rgba(0, 0, 0, 0.8);
+}
+
+/****************************************/
+
+.Subcontainer {
+	display: flex;
+	position: relative;
+	width: 100%;
+	max-width: 1000px;
+	height: 40px;
+
+	align-items: center;
+}
+
+.Logo {
+	display: inline-block;
+	width: 132px;
+	height: 54px;
+
+	text-indent: -9999px;
+
+	background-image: url('./assets/logo.png');
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+/****************************************/
+
+.Button {
+	position: absolute;
+	right: 0px;
+}
+
+/****************************************/
+
+@media screen and (min-width: 1024px) {
+	.Container {
+		height: 80px;
+	}
+
+	.Logo {
+		display: none;
+	}
+
+	.Button {
+		position: static;
+	}
+}

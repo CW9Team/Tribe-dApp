@@ -1,0 +1,182 @@
+/*////////*/
+/* STYLES */
+/*////////*/
+
+/* SECTION CONTAINER */
+.Container {
+	display: flex;
+	width: 100%;
+	max-width: 800px;
+
+	margin: 0 0 0 0;
+	padding: 130px 0px 100px 0px;
+
+	text-align: center;
+	justify-content: center;
+}
+
+.Content {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+}
+
+.TribePop {
+	display: none;
+}
+
+.TribePopMobile {
+	font-family: Lato;
+	font-style: normal;
+	font-weight: 800;
+	font-size: 34px;
+	line-height: 40px;
+
+	max-width: 340px;
+	display: inline-block;
+	margin-bottom: 45px;
+	align-items: center;
+	text-align: center;
+	letter-spacing: -0.017em;
+
+	color: #ffffff;
+	text-shadow: 1px 1px 2px black;
+}
+
+/* GRADIENT TEXT ('TribePop') */
+.GradientText {
+	font-weight: 800;
+	background: linear-gradient(
+		to right,
+		rgb(255, 1, 126),
+		rgb(169, 1, 250),
+		rgb(3, 238, 254)
+	);
+	-webkit-text-fill-color: transparent;
+	-webkit-background-clip: text;
+}
+
+.Text {
+	font-family: Lato;
+	font-style: normal;
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 18px;
+
+	margin-top: 25px;
+	display: inline-block;
+	align-items: center;
+	text-align: center;
+	letter-spacing: -0.017em;
+
+	color: #ffffff;
+}
+
+.ButtonContainer {
+	margin-top: 15px;
+	margin-bottom: 30px;
+}
+
+/*/////////*/
+/* SCREENS */
+/*/////////*/
+
+/* MOBILE MEDIUM AND LARGE */
+@media only screen and (min-width: 426px) {
+	.Text {
+		font-size: 18px;
+		line-height: 20px;
+	}
+}
+
+/* TABLET */
+@media only screen and (min-width: 600px) {
+	.Subcontainer {
+		display: flex;
+		flex-direction: row-reverse;
+		justify-content: center;
+		align-items: center;
+		max-width: 768px;
+		margin-left: auto;
+		margin-right: auto;
+		padding: 0px 20px 0px 20px;
+	}
+	.Content {
+		margin-right: 30px;
+	}
+	.TribePopMobile {
+		display: none;
+	}
+	.TribePop {
+		font-family: Lato;
+		font-style: normal;
+		font-weight: 800;
+		font-size: 40px;
+		line-height: 48px;
+
+		max-width: 340px;
+		display: inline-block;
+		margin-top: 55px;
+		align-items: center;
+		text-align: center;
+		letter-spacing: -0.017em;
+
+		color: #ffffff;
+		text-shadow: 1px 1px 2px black;
+	}
+	.Text {
+		font-weight: 500;
+		font-size: 18px;
+		line-height: 22px;
+		margin-top: 35px;
+	}
+}
+
+/* PC */
+@media only screen and (min-width: 800px) {
+	.Subcontainer {
+		display: flex;
+		flex-direction: row-reverse;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.Content {
+		margin-right: 100px;
+	}
+	.TribePopMobile {
+		display: none;
+	}
+	.TribePop {
+		font-family: Lato;
+		font-style: normal;
+		font-weight: 800;
+		font-size: 38px;
+		line-height: 48px;
+
+		max-width: 340px;
+		display: inline-block;
+		margin-top: 55px;
+		align-items: center;
+		text-align: center;
+		letter-spacing: -0.017em;
+
+		color: #ffffff;
+		text-shadow: 1px 1px 2px black;
+	}
+	.Text {
+		font-weight: 500;
+		font-size: 18px;
+		line-height: 22px;
+		margin-top: 35px;
+	}
+}
+
+@media screen and (min-width: 1024px) {
+	.Container {
+		margin: 0 0 100px 0;
+		padding: 80px 0px 0px 0px;
+	}
+}

@@ -1,0 +1,145 @@
+.Container {
+	width: 100%;
+}
+
+.Title {
+	color: white;
+	font-family: Lato;
+	font-style: normal;
+	font-weight: 800;
+	font-size: 30px;
+	line-height: 36px;
+	text-align: center;
+	margin-bottom: 50px;
+}
+
+.Hr {
+	background: white;
+	width: 75%;
+	height: 0.6px;
+	margin: 0px auto 20px auto;
+}
+
+@keyframes spin {
+	from {
+		transform: rotate(90deg);
+	}
+	to {
+		transform: rotate(0deg);
+	}
+}
+
+@keyframes spinOpen {
+	from {
+		transform: rotate(-90deg);
+	}
+	to {
+		transform: rotate(0deg);
+	}
+}
+
+.Img {
+	animation-name: spin;
+	animation-duration: 0.5s;
+	animation-iteration-count: 1;
+	width: 24px;
+	height: auto;
+	margin-right: 15px;
+	margin-bottom: 4px;
+}
+
+.ImgOpen {
+	animation-name: spinOpen;
+	animation-duration: 0.5s;
+	animation-iteration-count: 1;
+	width: 24px;
+	height: auto;
+	margin-right: 15px;
+	margin-bottom: 4px;
+}
+
+.Question {
+	display: inline-block;
+	overflow: show;
+
+	color: white;
+	font-family: Lato;
+	font-style: normal;
+	font-weight: 600;
+	font-size: 18px;
+	padding-left: 48px;
+	width: 85%;
+}
+
+.Answer {
+	display: inline-block;
+	overflow: hidden;
+
+	color: white;
+	font-family: Lato;
+	font-style: normal;
+	font-weight: 500;
+	font-size: 16px;
+	padding-left: 48px;
+	width: 85%;
+}
+
+@media screen and (min-width: 425px) {
+	/* .Container {
+		min-height: 100px;
+	} */
+	.Hr {
+		width: 78%;
+	}
+}
+
+/* 88888888888888888888888888888888 */
+@media screen and (min-width: 768px) {
+	.Container {
+		max-width: 800px;
+	}
+	.Title {
+		font-family: Lato;
+		font-style: normal;
+		font-weight: 800;
+		font-size: 42px;
+		line-height: 42px;
+	}
+	.Question {
+		font-family: Lato;
+		font-style: normal;
+		font-weight: 600;
+		font-size: 26px;
+		line-height: 26px;
+		padding-left: 62px;
+		width: 100%;
+	}
+	.Answer {
+		font-family: Lato;
+		font-style: normal;
+		font-weight: 500;
+		font-size: 18px;
+		line-height: 26px;
+		padding-left: 118px;
+		width: 90%;
+	}
+	.Img {
+		display: inline-block;
+		width: 26px;
+	}
+	.ImgOpen {
+		display: inline-block;
+		width: 26px;
+	}
+	.Hr {
+		width: 85%;
+	}
+}
+
+/* 88888888888888888888888888888888 */
+@media screen and (min-width: 1024px) {
+	.Title {
+		font-size: 56px;
+		line-height: 56px;
+	}
+}

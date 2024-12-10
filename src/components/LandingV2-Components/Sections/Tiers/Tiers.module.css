@@ -1,0 +1,122 @@
+/******************/
+/* 	MOBILE FIRST  */
+/******************/
+
+.CardContainer {
+	width: 100%;
+	padding: 150px 0px 50px 0px;
+	
+}
+
+.Card {
+	display: inline-block;
+	margin: 10px;
+	
+}
+
+.TiersContainer {
+	text-align: center;
+}
+
+.Tiers {
+	font-family: Lato;
+	font-style: normal;
+	font-weight: 800;
+	font-size: 40px;
+	line-height: 40px;
+	display: inline-block;
+
+	margin-bottom: 20px;
+	align-items: center;
+	text-align: center;
+	letter-spacing: -0.017em;
+	color: #ffffff;
+	text-shadow: 1px 1px 2px black;
+}
+
+.Card > h3 {
+	font-family: Lato;
+	font-style: normal;
+	font-weight: 700;
+	font-size: 16px;
+	line-height: 20px;
+
+	margin-top: 0px;
+	align-items: center;
+	text-align: center;
+	letter-spacing: -0.017em;
+	color: #ffffff;
+}
+
+.Standing {
+	display: none;
+}
+
+/***********/
+/* 	VIEWS  */
+/***********/
+
+/* TABLET */
+
+@media only screen and (min-width: 680px) and (max-width: 1023px) {
+	.CardContainer {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+	.TiersContainer {
+		text-align: center;
+	}
+	.Standing {
+		display: flex;
+		justify-content: center;
+	}
+	.Card {
+		display: inline-block;
+		
+	}
+	.Tiers {
+		font-size: 44px;
+		line-height: 44px;
+
+		margin-top: 35px;
+		margin-bottom: 20px;
+	}
+	.Card > h3 {
+		font-weight: 700;
+		font-size: 20px;
+		line-height: 26px;
+	}
+}
+
+/* PC */
+
+@media only screen and (min-width: 1024px) {
+	.CardContainer {
+		width: 768px;
+		padding: 80px 0px 40px 0px;
+	}
+	.TiersContainer {
+		text-align: center;
+	}
+	.Standing {
+		display: flex;
+		justify-content: center;
+		width: 100%;
+	}
+	.Card {
+		display: inline-block;
+	}
+	.Tiers {
+		font-size: 48px;
+		line-height: 48px;
+
+		margin-top: 48px;
+		margin-bottom: 20px;
+	}
+	.Card > h3 {
+		font-weight: 700;
+		font-size: 20px;
+		line-height: 26px;
+	}
+}

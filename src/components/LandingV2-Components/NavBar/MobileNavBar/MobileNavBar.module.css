@@ -1,0 +1,56 @@
+.Container {
+	display: flex;
+	position: relative;
+
+	margin-top: 30px;
+}
+
+/*******************************/
+
+.NavContainer {
+	width: 100%;
+	margin: 0;
+	overflow: visible;
+}
+
+.NavContainer > div {
+	display: flex;
+}
+
+/*******************************/
+
+.Button {
+	display: inline-block;
+	background: none;
+	border: none;
+	text-align: center;
+	margin: 0px 15px;
+	transition: transform 0.2s ease-in-out;
+}
+
+.Link {
+	font-family: Lato;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 28px;
+	line-height: 26px;
+	transition: color 0.5s ease-in-out;
+}
+
+.NotSelected > .Link {
+	color: rgba(255, 255, 255, 0.5);
+}
+
+.Selected {
+	transform: scale(1.2);
+}
+
+.Selected > .Link,
+.Link:hover {
+	color: white;
+}
+@media screen and (min-width: 1024px) {
+	.Container {
+		display: none;
+	}
+}

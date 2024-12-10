@@ -1,0 +1,101 @@
+/*////////*/
+/* STYLES */
+/*////////*/
+
+/* Container */
+.Container {
+	position: relative;
+	display: inline-block;
+	margin: 7px;
+}
+
+/* 8888888888888888888888888888 */
+
+.Circulo {
+	position: absolute;
+	width: 85px;
+	height: auto;
+	top: 5px;
+}
+
+/* 8888888888888888888888888888 */
+
+.Picture {
+	position: relative;
+	width: 85px;
+	height: auto;
+	transition: transform 0.2s ease-in;
+	margin-bottom: 10px;
+}
+
+.Picture:hover {
+	transform: scale(1.05);
+	transition: transform 0.3s ease-in;
+}
+
+.Text {
+	font-family: Lato;
+	font-style: normal;
+	font-weight: 500;
+	font-size: 12px;
+	line-height: 19px;
+
+	align-items: center;
+	text-align: center;
+	letter-spacing: -0.017em;
+	margin: 0;
+
+	color: #ffffff;
+}
+
+.Text2 {
+	font-family: Lato;
+	font-style: normal;
+	font-weight: 500;
+	font-size: 12px;
+	line-height: 12px;
+
+	align-items: center;
+	text-align: center;
+	letter-spacing: -0.017em;
+	margin: 0;
+
+	color: #ffffff;
+}
+
+.Text b {
+	font-weight: 600;
+	font-size: 17px;
+}
+
+/* 8888888888888888888888888888 */
+
+@media screen and (min-width: 769px) {
+	.Circulo {
+		width: 120px;
+	}
+	.Picture {
+		width: 120px;
+	}
+	.Text {
+		font-family: Lato;
+		font-style: normal;
+		font-weight: 500;
+		font-size: 16px;
+		line-height: 19px;
+	}
+	.Text b {
+		font-family: Lato;
+		font-style: normal;
+		font-weight: 800;
+		font-size: 24px;
+		line-height: 29px;
+	}
+	.Text2 {
+		font-family: Lato;
+		font-style: normal;
+		font-weight: 500;
+		font-size: 16px;
+		line-height: 16px;
+	}
+}

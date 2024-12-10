@@ -1,0 +1,74 @@
+/* //////////// */
+/* MOBILE FIRST */
+/* //////////// */
+
+/* CONTAINER */
+/* .Container {
+} */
+
+/* 88888888888888888888888888888 */
+
+.Button {
+	display: flex;
+	align-items: start;
+	background: none;
+	border: none;
+	margin-bottom: 10px;
+}
+
+.Title {
+	color: white;
+	font-family: Lato;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 20px;
+	line-height: 20px;
+	margin: 0;
+	text-align: left;
+}
+
+.Img {
+	width: 26px;
+	height: auto;
+	margin-right: 15px;
+}
+
+/* 88888888888888888888888888888 */
+
+.Text {
+	display: inline-block;
+	overflow: hidden;
+
+	color: white;
+	font-family: Lato;
+	font-style: normal;
+	font-weight: 600;
+	font-size: 16px;
+	padding-left: 48px;
+}
+
+/* 88888888888888888888888888888 */
+/* ////////////////// */
+/* TABLET AND PC SIZE */
+/* ////////////////// */
+
+@media screen and (min-width: 769px) {
+	.Img {
+		width: 40px;
+	}
+	.Title {
+		font-family: Lato;
+		font-style: normal;
+		font-weight: bold;
+		font-size: 28px;
+		line-height: 43px;
+	}
+	.Text {
+		font-family: Lato;
+		font-style: normal;
+		font-weight: 600;
+		font-size: 18px;
+		line-height: 22px;
+		padding-left: 62px;
+	}
+}

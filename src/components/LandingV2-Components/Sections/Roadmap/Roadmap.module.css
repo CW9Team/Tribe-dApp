@@ -1,0 +1,699 @@
+/****************/
+/* MOBILE FIRST */
+/****************/
+
+/* MOBILE SMALL */
+
+/* CONTAINERS */
+
+.Container {
+	display: flex;
+	width: 100vw;
+	overflow: hidden;
+
+	margin: 0;
+	padding-top: 100px;
+}
+
+.SubContainer {
+	display: flex;
+	width: 100%;
+	height: 100%;
+
+	margin: 0;
+
+	justify-content: center;
+}
+
+.Content {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	max-width: 1366px;
+	padding-top: 60px;
+	padding-bottom: 100px;
+
+	margin: 0;
+
+	position: relative;
+	justify-content: center;
+	align-items: center;
+}
+
+/*************************************/
+
+.Central {
+	display: inline-block;
+	width: 5px;
+	height: 75%;
+	margin-top: 40px;
+
+	background-color: none;
+	z-index: 1;
+
+	position: absolute;
+	left: 20.5%;
+	border-left: 3px dashed #d70aba;
+}
+
+/********************************/
+
+.TitleContainer {
+	text-align: center;
+}
+
+.Title {
+	font-family: Lato;
+	font-style: normal;
+	font-weight: 800;
+	font-size: 38px;
+	line-height: 38px;
+	display: inline-block;
+
+	margin-bottom: 40px;
+	align-items: center;
+	text-align: center;
+	letter-spacing: -0.017em;
+	color: #ffffff;
+	text-shadow: 1px 1px 2px black;
+}
+
+/********************************/
+
+.StepContainer {
+	display: inline-block;
+	width: 100%;
+
+	text-align: left;
+}
+
+/********************************/
+
+/* ROAD MAP */
+
+.RoadLeftContainer {
+	display: flex;
+	flex-direction: row-reverse;
+	margin-top: 30px;
+	justify-content: right;
+}
+
+.RoadRightContainer {
+	display: flex;
+	flex-direction: row-reverse;
+	margin-top: 30px;
+	justify-content: right;
+}
+
+.ContentLeft {
+	display: inline-block;
+	width: 55%;
+	margin-left: 0px;
+	margin-right: 10%;
+	padding-top: 10px;
+}
+
+.ContentRight {
+	display: inline-block;
+	width: 55%;
+	margin-right: 10%;
+	margin-left: 10px;
+	padding-top: 10px;
+}
+
+.RoadTitle {
+	color: white;
+	font-size: 24px;
+	font-weight: 700;
+	margin-top: 0px;
+}
+
+.RoadTextLeft {
+	color: white;
+	font-size: 16px;
+	font-weight: 400;
+	text-align: left;
+	margin-top: 20px;
+}
+
+.RoadTextRight {
+	color: white;
+	font-size: 16px;
+	font-weight: 400;
+	text-align: left;
+	margin-top: 20px;
+}
+
+.DashLeft {
+	display: none;
+	width: 1%;
+	height: 6px;
+	margin-top: 30px;
+	margin-left: 10px;
+
+	background: #d70aba;
+}
+
+.Percent {
+	display: flex;
+	position: absolute;
+	width: 50px;
+	height: 50px;
+	margin-top: 2px;
+
+	border-radius: 30px;
+
+	left: calc(20% - 20px);
+	z-index: 1;
+
+	background: #d70aba;
+	align-items: center;
+	justify-content: center;
+
+	color: white;
+	font-size: 24px;
+	font-weight: 700;
+}
+
+.PercentTop {
+	display: flex;
+	position: absolute;
+	width: 80px;
+	height: 80px;
+	margin-top: -7px;
+
+	border-radius: 40px;
+
+	left: calc(20% - 36px);
+	z-index: 1;
+
+	background: #d70aba;
+	align-items: center;
+	justify-content: center;
+
+	color: white;
+	font-size: 24px;
+	font-weight: 700;
+}
+
+.Img {
+	width: 68px;
+	height: auto;
+	margin-right: -2px;
+	margin-bottom: 1px;
+}
+
+.TitleLineTop {
+	display: inline-block;
+	width: 18%;
+	height: 4px;
+	background: #d70aba;
+	z-index: 0;
+	margin-top: 30px;
+	right: 160px;
+	position: absolute;
+	border-radius: 5px;
+}
+
+.PCTitleLineTop {
+	display: none;
+}
+
+.PCTitleLineLeft {
+	display: none;
+}
+
+.PCTitleLineRight {
+	display: none;
+}
+
+.TitleLine {
+	display: inline-block;
+	width: 20%;
+	height: 4px;
+	background: #d70aba;
+	z-index: 0;
+	margin-top: 26px;
+	right: 165px;
+	position: absolute;
+	border-radius: 5px;
+}
+
+.Left {
+	text-align: center;
+	margin-left: 45px;
+	margin-top: 4px;
+}
+
+.Right {
+	text-align: center;
+	margin-left: 45px;
+	margin-top: 4px;
+}
+
+/****************************/
+
+/* MOBILE SMALL/MEDIUM */
+
+@media only screen and (min-width: 321px) and (max-width: 356px) {
+	.Central {
+		height: 74%;
+	}
+	.PercentTop {
+		left: calc(20% - 35px);
+	}
+	.TitleLineTop {
+		right: 178px;
+	}
+	.TitleLine {
+		right: 187px;
+	}
+}
+
+@media only screen and (min-width: 357px) and (max-width: 375px) {
+	.Central {
+		height: 73%;
+	}
+	.PercentTop {
+		left: calc(20% - 35px);
+	}
+	.TitleLineTop {
+		right: 190px;
+	}
+	.TitleLine {
+		right: 200px;
+	}
+}
+
+/* MOBILE MEDIUM/LARGE */
+
+@media only screen and (min-width: 375px) and (max-width: 426px) {
+	.Central {
+		height: 73%;
+	}
+	.PercentTop {
+		left: calc(20% - 35px);
+	}
+	.TitleLineTop {
+		width: 25%;
+		right: 210px;
+	}
+	.TitleLine {
+		width: 24%;
+		right: 215px;
+	}
+	.Img {
+		margin-right: -1px;
+	}
+}
+
+@media only screen and (min-width: 407px) and (max-width: 426px) {
+	.Central {
+		height: 73%;
+	}
+}
+
+/* MOBILE LARGE TO 600PX */
+
+@media only screen and (min-width: 426px) and (max-width: 500px) {
+	.Central {
+		height: 72%;
+	}
+	.PercentTop {
+		left: calc(20% - 35px);
+	}
+	.TitleLineTop {
+		width: 120px;
+		right: 240px;
+	}
+	.TitleLine {
+		width: 23%;
+		right: 257px;
+	}
+}
+
+@media only screen and (min-width: 501px) and (max-width: 600px) {
+	.Central {
+		height: 72%;
+	}
+	.RoadTitle {
+		color: white;
+		font-size: 24px;
+		font-weight: 700;
+		margin-top: 0px;
+	}
+	.PercentTop {
+		left: calc(20% - 35px);
+	}
+	.TitleLineTop {
+		width: 25%;
+		right: 290px;
+	}
+}
+
+/* FIXING THE LINE */
+
+@media only screen and (min-width: 501px) and (max-width: 575px) {
+	.TitleLine {
+		width: 25%;
+		right: 290px;
+	}
+}
+
+@media only screen and (min-width: 575px) and (max-width: 600px) {
+	.TitleLine {
+		width: 25%;
+		right: 300px;
+	}
+}
+
+/********************************/
+
+/***************/
+/* TABLET MODE */
+/***************/
+
+/* TABLET */
+
+@media only screen and (min-width: 600px) and (max-width: 768px) {
+	.Central {
+		height: 71%;
+		position: absolute;
+		left: calc(50% - 5px);
+	}
+	.Title {
+		font-size: 44px;
+		line-height: 44px;
+
+		margin-bottom: 40px;
+	}
+	.StepContainer {
+		display: inline-block;
+		width: 100%;
+
+		text-align: center;
+	}
+	.RoadLeftContainer {
+		display: flex;
+		flex-direction: row;
+		margin-top: 30px;
+		justify-content: left;
+	}
+	.RoadRightContainer {
+		display: flex;
+		margin-top: 30px;
+		justify-content: right;
+	}
+	.ContentLeft {
+		display: inline-block;
+		width: 33%;
+		margin-left: 10%;
+	}
+	.ContentRight {
+		display: inline-block;
+		width: 33%;
+		margin-right: 10%;
+		margin-left: 10px;
+	}
+	.RoadTitle {
+		color: white;
+		font-size: 26px;
+		font-weight: 700;
+	}
+	.RoadTextLeft {
+		color: white;
+		font-size: 16px;
+		font-weight: 400;
+		text-align: right;
+	}
+	.RoadTextRight {
+		color: white;
+		font-size: 16px;
+		font-weight: 400;
+		text-align: left;
+	}
+	.Percent {
+		display: flex;
+		position: absolute;
+		width: 60px;
+		height: 60px;
+		margin-top: 2px;
+
+		border-radius: 30px;
+
+		left: calc(50% - 32.2px);
+		z-index: 1;
+
+		background: #d70aba;
+		align-items: center;
+		justify-content: center;
+
+		color: white;
+		font-size: 24px;
+		font-weight: 700;
+	}
+	.PercentTop {
+		left: calc(50% - 42px);
+	}
+	.Right {
+		margin-right: 30px;
+		margin-top: 10px;
+	}
+	.Left {
+		margin-left: 35px;
+		margin-top: 10px;
+	}
+	.TitleLine {
+		display: none;
+	}
+	.TitleLineTop {
+		display: none;
+	}
+	.PCTitleLineTop {
+		display: inline-block;
+		width: 16%;
+		height: 4px;
+		background: #d70aba;
+		z-index: 0;
+		right: calc(50% - 35px);
+		margin-top: 30px;
+		position: absolute;
+		border-radius: 5px;
+	}
+	.PCTitleLineLeft {
+		display: inline-block;
+		width: 15%;
+		height: 4px;
+		background: #d70aba;
+		z-index: 0;
+		right: calc(50% - 25px);
+		margin-top: 30px;
+		position: absolute;
+		border-radius: 5px;
+	}
+	.PCTitleLineRight {
+		display: inline-block;
+		width: 14.5%;
+		height: 4px;
+		background: #d70aba;
+		z-index: 0;
+		left: calc(50% - 25px);
+		margin-top: 30px;
+		position: absolute;
+		border-radius: 5px;
+	}
+}
+
+/********************************/
+
+/***************/
+/*   PC MODE   */
+/***************/
+
+@media only screen and (min-width: 768px) {
+	.Container {
+		width: 100%;
+		padding-top: 80px;
+	}
+	.Central {
+		position: absolute;
+		left: calc(50% - 5px);
+	}
+
+	.TitleContainer {
+		text-align: center;
+	}
+
+	.Title {
+		font-family: Lato;
+		font-style: normal;
+		font-weight: 800;
+		font-size: 48px;
+		line-height: 48px;
+		display: inline-block;
+
+		margin-bottom: 40px;
+		align-items: center;
+		text-align: center;
+		letter-spacing: -0.017em;
+		color: #ffffff;
+		text-shadow: 1px 1px 2px black;
+	}
+
+	.RoadLeftContainer {
+		display: flex;
+		flex-direction: row;
+		margin-top: 30px;
+		justify-content: left;
+	}
+
+	.RoadRightContainer {
+		display: flex;
+		margin-top: 30px;
+		justify-content: right;
+	}
+
+	.ContentLeft {
+		display: inline-block;
+		width: 35%;
+		margin-left: 10%;
+	}
+
+	.ContentRight {
+		display: inline-block;
+		width: 35%;
+		margin-right: 10%;
+		margin-left: 10px;
+	}
+
+	.RoadTitle {
+		color: white;
+		font-size: 26px;
+		font-weight: 700;
+	}
+
+	.RoadTextLeft {
+		color: white;
+		font-size: 18px;
+		font-weight: 400;
+		text-align: right;
+	}
+
+	.RoadTextRight {
+		color: white;
+		font-size: 18px;
+		font-weight: 400;
+		text-align: left;
+	}
+
+	.PercentTop {
+		left: calc(50% - 43px);
+	}
+
+	.Percent {
+		display: flex;
+		position: absolute;
+		width: 60px;
+		height: 60px;
+		margin-top: 2px;
+
+		border-radius: 30px;
+
+		left: calc(50% - 32.2px);
+		z-index: 1;
+
+		background: #d70aba;
+		align-items: center;
+		justify-content: center;
+
+		color: white;
+		font-size: 24px;
+		font-weight: 700;
+	}
+
+	.Right {
+		margin-right: 30px;
+		margin-top: 10px;
+	}
+
+	.Left {
+		margin-left: 35px;
+		margin-top: 10px;
+	}
+
+	.TitleLine {
+		display: none;
+	}
+
+	.TitleLineTop {
+		display: none;
+	}
+
+	.PCTitleLineTop {
+		display: inline-block;
+		width: 13%;
+		height: 4px;
+		background: #d70aba;
+		z-index: 0;
+		right: calc(50% - 35px);
+		margin-top: 30px;
+		position: absolute;
+		border-radius: 5px;
+	}
+
+	.PCTitleLineLeft {
+		display: inline-block;
+		width: 11%;
+		height: 4px;
+		background: #d70aba;
+		z-index: 0;
+		right: calc(50% - 25px);
+		margin-top: 30px;
+		position: absolute;
+		border-radius: 5px;
+	}
+
+	.PCTitleLineRight {
+		display: inline-block;
+		width: 10.5%;
+		height: 4px;
+		background: #d70aba;
+		z-index: 0;
+		left: calc(50% - 25px);
+		margin-top: 30px;
+		position: absolute;
+		border-radius: 5px;
+	}
+	
+	.Img {
+		margin-right: -0.9px;
+	}
+}
+
+/***************/
+/*   PC MODE   */
+/***************/
+
+@media only screen and (min-width: 769px) {
+	.Central {
+		height: 73%;
+	}
+}
+
+@media only screen and (min-width: 843px) and (max-width: 857px) {
+	.Central {
+		height: 73%;
+	}
+}
+
+@media only screen and (min-width: 858px) and (max-width: 1100px) {
+	.Central {
+		height: 71%;
+	}
+}
+
+@media only screen and (min-width: 1100px) {
+	.Central {
+		height: 69%;
+	}
+}

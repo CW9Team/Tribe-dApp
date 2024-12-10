@@ -1,0 +1,72 @@
+.Container {
+	display: none;
+	height: 100%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/*88888888888888888888888888888888*/
+
+.Logo {
+	display: none;
+	width: 110px;
+	height: 45px;
+
+	text-indent: -9999px;
+
+	border: none;
+	background: none;
+	background-image: url('./assets/logo.png');
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+/*88888888888888888888888888888888*/
+
+.Button {
+	display: inline-block;
+	background: none;
+	border: none;
+	text-align: center;
+	margin: 0px 10px;
+	transition: transform 0.2s ease-in-out;
+}
+
+.Link {
+	font-family: Lato;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 20px;
+	line-height: 36px;
+	transition: color 0.5s ease-in-out;
+	margin: 0;
+}
+
+.NotSelected > .Link {
+	color: rgba(255, 255, 255, 0.5);
+}
+
+.Selected > .Link,
+.Link:hover {
+	color: white;
+}
+
+.Selected,
+.Button:hover {
+	transform: scale(1.2);
+}
+
+/*88888888888888888888888888888888*/
+
+@media screen and (min-width: 1024px) {
+	.Container {
+		display: flex;
+	}
+
+	.Logo {
+		display: inline-block;
+		width: calc(284px * 0.5);
+		height: calc(177px * 0.5);
+	}
+} ;

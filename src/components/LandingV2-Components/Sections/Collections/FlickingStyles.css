@@ -1,0 +1,31 @@
+.flicking-pagination-bullet {
+	background-color: white;
+}
+
+.flicking-pagination-bullet-active {
+	background-color: #d70aba;
+}
+
+.flicking-arrow-next.is-outside {
+    right: 30px;
+}
+
+.flicking-arrow-prev.is-outside {
+    left: 30px;
+}
+
+.flicking-arrow-next::before {
+	background-color: transparent !important;
+}
+
+.flicking-arrow-next::after {
+	background-color: transparent !important;
+}
+
+.flicking-arrow-prev::before {
+	background-color: transparent !important;
+}
+
+.flicking-arrow-prev::after {
+	background-color: transparent !important;
+}

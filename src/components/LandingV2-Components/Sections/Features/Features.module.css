@@ -1,0 +1,143 @@
+.Container {
+	display: inline-block;
+	width: 100%;
+	text-align: center;
+}
+
+.Container > h2 {
+	font-family: Lato;
+	font-style: normal;
+	font-weight: 800;
+	font-size: 46px;
+	line-height: 100%;
+	align-items: center;
+	text-align: center;
+	letter-spacing: -0, 017em;
+	margin-top: 150px;
+
+	color: #fffafa;
+
+	text-shadow: 3px 4px 5px rgba(0, 0, 0, 0.25);
+}
+
+.Container > h3 {
+	font-family: Lato;
+	font-style: normal;
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 80%;
+	align-items: center;
+	text-align: center;
+	letter-spacing: -0, 017em;
+
+	color: #fffafa;
+}
+
+/***********************************/
+/* CARDS CONTAINER */
+.Cards {
+	max-width: 300px;
+	margin: 20px auto;
+	display: grid;
+	grid-gap: 1rem;
+}
+
+/* EACH CARD */
+.Card {
+	margin-top: 30px;
+
+	font-family: Lato;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 14px;
+	line-height: 112.5%;
+	align-items: center;
+	text-align: center;
+	letter-spacing: -0.017em;
+
+	color: #ffffff;
+}
+
+.Card > img {
+	display: inline-block;
+	width: 85px;
+	height: auto;
+	transition: transform 0.3s ease-in;
+}
+
+.Card > img:hover {
+	transform: scale(1.05);
+	transition: transform 0.3s ease-in;
+}
+
+.Card > span {
+	margin-top: 10px;
+	display: block;
+}
+
+/***********************************/
+/*------------*/
+/* RESPONSIVE */
+/*------------*/
+
+@media screen and (max-width: 425px) {
+	.Cards {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media screen and (min-width: 425px) {
+	.Card {
+		font-size: 16px;
+	}
+	.Cards {
+		grid-template-columns: repeat(3, 1fr);
+		max-width: 500px;
+	}
+}
+
+@media screen and (min-width: 768px) {
+	.Cards {
+		grid-template-columns: repeat(3, 1fr);
+	}
+	.Container > h2 {
+		font-size: 58px;
+	}
+	.Container > h3 {
+		font-size: 20px;
+	}
+	.Br {
+		display: none;
+	}
+}
+
+@media (min-width: 900px) {
+	.Container > h2 {
+		font-size: 72px;
+	}
+	.Container > h3 {
+		font-size: 24px;
+	}
+	.Cards {
+		max-width: 800px;
+	}
+	.Card {
+		font-size: 18px;
+	}
+	.Card > img {
+		width: 120px;
+		height: auto;
+	}
+}
+
+@media screen and (min-width: 1024px) {
+	.Container > h2 {
+		font-size: 64px;
+	}
+}
+
+@media screen and (min-width: 1440px) {
+	.Card {
+		font-size: 20px;
+	}
+}
