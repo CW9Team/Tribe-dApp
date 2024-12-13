@@ -106,7 +106,7 @@ function Sidebar(props) {
 								onClick={() => props.getToggleStatus(false)}
 							>
 								<span className="Sidebar_icon__2uqhU1">
-									<MdGeneratingTokens color='#828384' />
+									<MdGeneratingTokens color="#828384" />
 								</span>
 								Projects
 							</NavLink>

@@ -36,17 +36,65 @@ export const initWeb3 = createAsyncThunk(
 					},
 				},
 			},
+			'custom-phantom': {
+				display: {
+					name: 'Phantom',
+					description: 'Connect to Phantom Wallet',
+					logo: 'https://187760183-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F-MVOiF6Zqit57q_hxJYp%2Ficon%2FU7kNZ4ygz4QW1rUwOuTT%2FWhite%20Ghost_docs_nu.svg?alt=media&token=447b91f6-db6d-4791-902d-35d75c19c3d1' // You can replace with actual Phantom logo URL
+				},
+				package: true,
+				connector: async () => {
+					if (!window.solana || !window.solana.isPhantom) {
+						window.open('https://phantom.app/', '_blank');
+						throw new Error('Please install Phantom wallet');
+					}
+					
+					try {
+						const resp = await window.solana.connect();
+						const provider = window.solana;
+						
+						// Create a custom provider interface that matches Web3 structure
+						const phantomProvider = {
+							...provider,
+							// Add necessary Web3 compatible methods
+							request: async ({ method, params }) => {
+								switch (method) {
+									case 'eth_accounts':
+										return [provider.publicKey.toString()];
+									// Add other necessary methods as needed
+									default:
+										throw new Error(`Method ${method} not supported`);
+								}
+							},
+							on: (event, callback) => {
+								switch (event) {
+									case 'accountsChanged':
+										provider.on('accountChanged', callback);
+										break;
+									case 'chainChanged':
+										// Phantom equivalent if needed
+										break;
+								}
+							}
+						};
+						
+						return phantomProvider;
+					} catch (err) {
+						throw new Error('User rejected the connection');
+					}
+				}
+			}
 		};
 		const bscTestnet = {
 			chainId: '0x61',
 			chainName: 'BSCTESTNET',
 			rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545'],
-			nativeCurrency: {
-				name: 'BINANCE COIN',
-				symbol: 'BNB',
-				decimals: 18,
-			},
-			blockExplorerUrls: ['https://testnet.bscscan.com/'],
+				nativeCurrency: {
+					name: 'BINANCE COIN',
+					symbol: 'BNB',
+					decimals: 18,
+				},
+				blockExplorerUrls: ['https://testnet.bscscan.com/'],
 		};
 		const bscMainnet = {
 			chainId: '0x38',
@@ -68,6 +116,26 @@ export const initWeb3 = createAsyncThunk(
 		});
 		try {
 			const provider = await web3Modal.connect();
+			if (provider.isPhantom) {
+				return {
+					web3: {
+						eth: {
+							getAccounts: async () => [provider.publicKey.toString()],
+							getBalance: async () => {
+								try {
+									const balance = await provider.connection.getBalance(provider.publicKey);
+									return balance.toString();
+								} catch (error) {
+									console.error('Error getting Phantom balance:', error);
+									return '0';
+								}
+							}
+						}
+					},
+					isPhantom: true,
+					phantomProvider: provider
+				};
+			}
 			if (provider.isMetaMask) {
 				try {
 					await window.ethereum.request({
@@ -160,6 +228,8 @@ const web3Slice = createSlice({
 		blockNum: null,
 		connected: false,
 		accountUrl: '#',
+		isPhantom: false,
+		phantomProvider: null
 	},
 	reducers: {
 		disconnectWallet: (state) => {
@@ -172,13 +242,17 @@ const web3Slice = createSlice({
 		},
 		[initWeb3.fulfilled]: (state, action) => {
 			state.web3 = action.payload.web3;
+			if (action.payload.isPhantom) {
+				state.isPhantom = true;
+				state.phantomProvider = action.payload.phantomProvider;
+				state.connected = true;
+			}
 		},
 		[fetchAccount.fulfilled]: (state, action) => {
 			state.address = action.payload.address;
-			state.shortAddress =
-				action.payload.address.slice(0, 6) +
-				'...' +
-				action.payload.address.slice(38, 42);
+			state.shortAddress = state.isPhantom 
+				? action.payload.address.slice(0, 4) + '...' + action.payload.address.slice(-4)
+				: action.payload.address.slice(0, 6) + '...' + action.payload.address.slice(38, 42);
 			state.accountUrl = memepad.prefix + action.payload.address;
 			state.balance = action.payload.balance;
 			state.connected = true;
