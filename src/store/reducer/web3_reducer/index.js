@@ -56,12 +56,10 @@ export const initWeb3 = createAsyncThunk(
 						// Create a custom provider interface that matches Web3 structure
 						const phantomProvider = {
 							...provider,
-							// Add necessary Web3 compatible methods
 							request: async ({ method, params }) => {
 								switch (method) {
 									case 'eth_accounts':
 										return [provider.publicKey.toString()];
-									// Add other necessary methods as needed
 									default:
 										throw new Error(`Method ${method} not supported`);
 								}
@@ -75,7 +73,9 @@ export const initWeb3 = createAsyncThunk(
 										// Phantom equivalent if needed
 										break;
 								}
-							}
+							},
+							connection: window.solana.connection,
+							publicKey: provider.publicKey
 						};
 						
 						return phantomProvider;

@@ -10,6 +10,8 @@
 		"@react-spring/core": "^9.2.6",
 		"@react-spring/web": "^9.2.6",
 		"@reduxjs/toolkit": "^1.6.0",
+		"@solana/spl-token": "^0.4.9",
+		"@solana/web3.js": "^1.95.8",
 		"@testing-library/jest-dom": "^5.14.1",
 		"@testing-library/react": "^11.2.7",
 		"@testing-library/user-event": "^12.8.3",
