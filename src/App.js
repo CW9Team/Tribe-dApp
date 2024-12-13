@@ -1,10 +1,10 @@
 import React from 'react';
-import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
-import LandingPage from './components/LandingPage/LandingPage';
 import LandingV2 from './pages/LandingV2/LandingV2';
 import './UpdatedSidebar.css';
 import Dashboard from './components/Dashboard/Dashboard';
+import PrivateSales from './components/PrivateSales/PrivateSales';
 
 function App() {
 	return (
@@ -19,6 +19,12 @@ function App() {
 					strict
 					path="/dashboard/staking"
 					render={() => <Dashboard />}
+				/>
+				<Route
+					exact
+					strict
+					path="/dashboard/projects"
+					render={() => <PrivateSales />}
 				/>
 				<Route
 					exact

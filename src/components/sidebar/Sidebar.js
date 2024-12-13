@@ -7,6 +7,7 @@ import { NavLink } from 'react-router-dom';
 import { SiReddit, SiGithub } from 'react-icons/si';
 import { AiFillInstagram } from 'react-icons/ai';
 // import ChristmasLogo from '../ChristmasComponents/Logo/ChristmasLogo';
+import { MdGeneratingTokens } from 'react-icons/md';
 
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -32,7 +33,8 @@ function Sidebar(props) {
 					{/* <ChristmasLogo sidebar /> */}
 					<div className="Sidebar_wallet__eXx60">
 						<button
-							style={{backgroundColor: '#CE3D3D'}} className=" Sidebar_buttonConnect__small Button_button__17x3e Sidebar_buttonConnect__3toNv Button_buttonSmall__3-WQV Button_buttonBlue__3LvNm"
+							style={{ backgroundColor: '#CE3D3D' }}
+							className=" Sidebar_buttonConnect__small Button_button__17x3e Sidebar_buttonConnect__3toNv Button_buttonSmall__3-WQV Button_buttonBlue__3LvNm"
 							onClick={
 								connected
 									? () => {
@@ -94,6 +96,19 @@ function Sidebar(props) {
 									</svg>
 								</span>
 								Staking
+							</NavLink>
+						</li>
+						<li className="Sidebar_item__rJc2e Sidebar_itemActive__11Rxt">
+							<NavLink
+								className="Sidebar_link__3B0JM"
+								to="/dashboard/projects"
+								activeClassName="Sidebar_link__3B0JM_active"
+								onClick={() => props.getToggleStatus(false)}
+							>
+								<span className="Sidebar_icon__2uqhU1">
+									<MdGeneratingTokens color='#828384' />
+								</span>
+								Projects
 							</NavLink>
 						</li>
 						<li className="Sidebar_item__rJc2e Sidebar_itemActive__11Rxt">
