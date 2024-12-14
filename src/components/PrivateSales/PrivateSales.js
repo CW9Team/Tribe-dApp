@@ -10,12 +10,10 @@ import { loadLaunchInfo } from '../../store/reducer/launch_reducer';
 import { projIds } from '../../store/reducer/launch_reducer/projectInitialStates';
 import '../../App.css';
 import AnimatedBackground from '../AnimatedBackground/AnimatedBackground';
-import { connectWallet, fetchBalance } from '../../store/reducer/web3_reducer';
+import { connectWallet } from '../../store/reducer/web3_reducer';
 import connectLogo from '../../images/connect-logo.svg';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import Web3 from 'web3';
-import { Connection, PublicKey } from '@solana/web3.js';
-import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 
 export const fetchAccount = createAsyncThunk(
 	'FetchAccount',
@@ -23,19 +21,16 @@ export const fetchAccount = createAsyncThunk(
 		try {
 			const state = thunkAPI.getState().web3;
 			const web3 = state.web3;
-			
-			// Handle Phantom wallet
 			if (state.isPhantom && state.phantomProvider) {
 				const address = state.phantomProvider.publicKey.toString();
-				// Get Phantom wallet balance in SOL
-				const balance = await state.phantomProvider.connection.getBalance(state.phantomProvider.publicKey);
+				const balance = await state.phantomProvider.connection.getBalance(
+					state.phantomProvider.publicKey,
+				);
 				return {
 					address,
-					balance: balance / 1000000000, // Convert lamports to SOL
+					balance: balance / 1000000000,
 				};
 			}
-			
-			// Handle MetaMask and other Web3 wallets
 			const address = (await web3.eth.getAccounts())[0];
 			if (!address) throw 'Account disconnected';
 			const balance = await web3.eth.getBalance(address);
@@ -49,8 +44,6 @@ export const fetchAccount = createAsyncThunk(
 		}
 	},
 );
-
-const TOKEN_CONTRACT_ADDRESS = "DC6vk2HjYLZmT6XAjNdfbBD2Sd3ikkNkoVLzz4QeA9WC";
 
 function PrivateSales(props) {
 	// STATES
@@ -68,9 +61,56 @@ function PrivateSales(props) {
 	const dispatch = useDispatch();
 	let location = useLocation();
 	const allProjects = useSelector((state) => state.launch);
-	const { connected, shortAddress, balance, isPhantom } = useSelector(
+	const { connected, shortAddress, balance, isPhantom, address } = useSelector(
 		(state) => state.web3,
 	);
+
+
+	async function fetchTokens() {
+		console.log('wallet address : ', address)
+		const getTokenAccountsResponse = await fetch('https://mainnet.helius-rpc.com/?api-key=201ae82c-0179-4400-aa9f-1dd6ae8dde94', {
+			method: 'POST',
+			headers: {
+			  "Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+			  "jsonrpc": "2.0",
+			  "id": 1,
+			  "method": "getTokenAccountsByOwner",
+			  "params": [
+				address,
+				{
+				  "programId": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+				},
+				{
+					'commitment': 'processed',
+				  "encoding": "base64"
+				}
+			  ]
+			}),
+		});
+		const parsedData = await getTokenAccountsResponse.json();
+		const tokenAccount = parsedData.result.value[0].pubkey;
+		console.log('Token account', tokenAccount);
+
+		const getTokenAccountBalanceResponse = await fetch('https://mainnet.helius-rpc.com/?api-key=201ae82c-0179-4400-aa9f-1dd6ae8dde94', {
+			method: 'POST',
+			headers: {
+			  "Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+			  "jsonrpc": "2.0",
+			  "id": 1,
+			  "method": "getTokenAccountBalance",
+			  "params": [
+				tokenAccount
+			  ]
+			}),
+		});
+		const parsedBalanceData = await getTokenAccountBalanceResponse.json();
+		console.log('--> finall data : ', parsedBalanceData.result.value.uiAmount);
+	}
+
 
 	// HANDLERS
 	const getToggleStatus = (props) => {
@@ -84,47 +124,8 @@ function PrivateSales(props) {
 		});
 	};
 
-	// Add function to check Solana token balance
-	const checkTokenBalance = async (walletAddress) => {
-		try {
-			const connection = new Connection('https://api.mainnet-beta.solana.com');
-			const ownerPublicKey = new PublicKey(walletAddress);
-			const tokenPublicKey = new PublicKey(TOKEN_CONTRACT_ADDRESS);
-
-			const tokenAccounts = await connection.getParsedTokenAccountsByOwner(
-				ownerPublicKey,
-				{
-					programId: TOKEN_PROGRAM_ID,
-				}
-			);
-
-			let balance = 0;
-			tokenAccounts.value.forEach((tokenAccount) => {
-				const accountData = tokenAccount.account.data.parsed.info;
-				if (accountData.mint === tokenPublicKey.toString()) {
-					balance = Number(accountData.tokenAmount.amount) / Math.pow(10, accountData.tokenAmount.decimals);
-				}
-			});
-
-			setTokenBalance(balance);
-			setIsLoading(false);
-		} catch (error) {
-			console.error('Error checking token balance:', error);
-			setIsLoading(false);
-		}
-	};
-
-	// Modify existing useEffect to include token balance check
-	useEffect(() => {
-		if (connected && shortAddress) {
-			checkTokenBalance(shortAddress);
-		}
-	}, [connected, shortAddress]);
-
-	// Add minimum token requirement
 	const MINIMUM_TOKEN_REQUIREMENT = 100000;
 
-	// USEEFFECT
 	useEffect(() => {
 		if (location.pathname === '/dashboard/celebrity-nfts') {
 			setTitle('TRIBEPOP NFTs');
@@ -133,9 +134,6 @@ function PrivateSales(props) {
 		} else if (location.pathname === '/dashboard/projects') {
 			setTitle('Projects');
 		}
-		const interval = setInterval(() => {
-			if (connected) dispatch(fetchBalance());
-		}, 3000);
 		const interval2 = setInterval(() => {
 			if (connected) {
 				for (let i = 0; i < projIds.length; ++i) {
@@ -144,7 +142,6 @@ function PrivateSales(props) {
 			}
 		}, 10000);
 		return () => {
-			clearInterval(interval);
 			clearInterval(interval2);
 		};
 	});
@@ -210,14 +207,13 @@ function PrivateSales(props) {
 						{/* <ChristmasLogo mobile /> */}
 					</div>
 					<strong className="Header_title__2eSkT">{title}</strong>
+					<button onClick={() => fetchTokens()}>Check tokens</button>
 					<div className="Header_wallet__1DOlJ">
 						{connected ? (
 							<span className="header-wallet-balance">
-								{isPhantom ? (
-									`${fixDecimals(balance, 4)} SOL`
-								) : (
-									`${fixDecimals(balance, 4)} BNB`
-								)}
+								{isPhantom
+									? `${fixDecimals(balance, 4)} SOL`
+									: `${fixDecimals(balance, 4)} BNB`}
 							</span>
 						) : null}
 						<button
@@ -248,6 +244,7 @@ function PrivateSales(props) {
 						</button>
 					</div>
 				</header>
+
 				{isLoading ? (
 					<div className="text-center mt-5">
 						<h2>Loading...</h2>
@@ -259,7 +256,11 @@ function PrivateSales(props) {
 				) : tokenBalance < MINIMUM_TOKEN_REQUIREMENT ? (
 					<div className="text-center mt-5">
 						<h2>Insufficient Token Balance</h2>
-						<p>You need to hold at least {MINIMUM_TOKEN_REQUIREMENT.toLocaleString()} tokens to access private sales.</p>
+						<p>
+							You need to hold at least{' '}
+							{MINIMUM_TOKEN_REQUIREMENT.toLocaleString()} tokens to access
+							private sales.
+						</p>
 						<p>Your current balance: {tokenBalance.toLocaleString()} tokens</p>
 					</div>
 				) : (
