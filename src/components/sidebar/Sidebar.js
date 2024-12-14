@@ -53,7 +53,7 @@ function Sidebar(props) {
 
 				<nav>
 					<ul className="Sidebar_items__1Hqtp">
-						<li className="Sidebar_item__rJc2e">
+						{/* <li className="Sidebar_item__rJc2e">
 							<NavLink
 								className="Sidebar_link__3B0JM"
 								to="/dashboard/celebrity-nfts"
@@ -74,8 +74,8 @@ function Sidebar(props) {
 								</span>
 								TRIBEPOP NFTs
 							</NavLink>
-						</li>
-						<li className="Sidebar_item__rJc2e Sidebar_itemActive__11Rxt">
+						</li> */}
+						{/* <li className="Sidebar_item__rJc2e Sidebar_itemActive__11Rxt">
 							<NavLink
 								className="Sidebar_link__3B0JM"
 								to="/dashboard/staking"
@@ -97,7 +97,7 @@ function Sidebar(props) {
 								</span>
 								Staking
 							</NavLink>
-						</li>
+						</li> */}
 						<li className="Sidebar_item__rJc2e Sidebar_itemActive__11Rxt">
 							<NavLink
 								className="Sidebar_link__3B0JM"
@@ -111,7 +111,7 @@ function Sidebar(props) {
 								Projects
 							</NavLink>
 						</li>
-						<li className="Sidebar_item__rJc2e Sidebar_itemActive__11Rxt">
+						{/* <li className="Sidebar_item__rJc2e Sidebar_itemActive__11Rxt">
 							<a
 								className="Sidebar_link__3B0JM"
 								href="https://docs.tribetoken.app/"
@@ -136,7 +136,7 @@ function Sidebar(props) {
 								</span>
 								Tutorials
 							</a>
-						</li>
+						</li> */}
 					</ul>
 				</nav>
 				<div className="Sidebar_bottom__3eeR3">
