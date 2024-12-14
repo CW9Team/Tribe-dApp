@@ -9,11 +9,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loadLaunchInfo } from '../../store/reducer/launch_reducer';
 import { projIds } from '../../store/reducer/launch_reducer/projectInitialStates';
 import '../../App.css';
+import './privateSales.css';
 import AnimatedBackground from '../AnimatedBackground/AnimatedBackground';
 import { connectWallet } from '../../store/reducer/web3_reducer';
 import connectLogo from '../../images/connect-logo.svg';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import Web3 from 'web3';
+
+
+const MINIMUM_TOKEN_REQUIREMENT = 10000;
+
 
 export const fetchAccount = createAsyncThunk(
 	'FetchAccount',
@@ -52,6 +57,7 @@ function PrivateSales(props) {
 	const [title, setTitle] = useState(null);
 	const [tokenBalance, setTokenBalance] = useState(0);
 	const [isLoading, setIsLoading] = useState(true);
+	const [tribeBalance, setTribeBalance] = useState(0);
 
 	const liveLaunches = [],
 		completedLaunches = [],
@@ -67,48 +73,54 @@ function PrivateSales(props) {
 
 
 	async function fetchTokens() {
-		console.log('wallet address : ', address)
-		const getTokenAccountsResponse = await fetch('https://mainnet.helius-rpc.com/?api-key=201ae82c-0179-4400-aa9f-1dd6ae8dde94', {
-			method: 'POST',
-			headers: {
-			  "Content-Type": "application/json"
-			},
-			body: JSON.stringify({
-			  "jsonrpc": "2.0",
-			  "id": 1,
-			  "method": "getTokenAccountsByOwner",
-			  "params": [
-				address,
-				{
-				  "programId": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+		try {
+			setIsLoading(true);
+			const getTokenAccountsResponse = await fetch('https://mainnet.helius-rpc.com/?api-key=201ae82c-0179-4400-aa9f-1dd6ae8dde94', {
+				method: 'POST',
+				headers: {
+				  "Content-Type": "application/json"
 				},
-				{
-					'commitment': 'processed',
-				  "encoding": "base64"
-				}
-			  ]
-			}),
-		});
-		const parsedData = await getTokenAccountsResponse.json();
-		const tokenAccount = parsedData.result.value[0].pubkey;
-		console.log('Token account', tokenAccount);
+				body: JSON.stringify({
+				  "jsonrpc": "2.0",
+				  "id": 1,
+				  "method": "getTokenAccountsByOwner",
+				  "params": [
+					address,
+					{
+					  "programId": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+					},
+					{
+						'commitment': 'processed',
+					  "encoding": "base64"
+					}
+				  ]
+				}),
+			});
+			const parsedData = await getTokenAccountsResponse.json();
+			const tokenAccount = parsedData.result.value[0].pubkey;
 
-		const getTokenAccountBalanceResponse = await fetch('https://mainnet.helius-rpc.com/?api-key=201ae82c-0179-4400-aa9f-1dd6ae8dde94', {
-			method: 'POST',
-			headers: {
-			  "Content-Type": "application/json"
-			},
-			body: JSON.stringify({
-			  "jsonrpc": "2.0",
-			  "id": 1,
-			  "method": "getTokenAccountBalance",
-			  "params": [
-				tokenAccount
-			  ]
-			}),
-		});
-		const parsedBalanceData = await getTokenAccountBalanceResponse.json();
-		console.log('--> finall data : ', parsedBalanceData.result.value.uiAmount);
+			const getTokenAccountBalanceResponse = await fetch('https://mainnet.helius-rpc.com/?api-key=201ae82c-0179-4400-aa9f-1dd6ae8dde94', {
+				method: 'POST',
+				headers: {
+				  "Content-Type": "application/json"
+				},
+				body: JSON.stringify({
+				  "jsonrpc": "2.0",
+				  "id": 1,
+				  "method": "getTokenAccountBalance",
+				  "params": [
+					tokenAccount
+				  ]
+				}),
+			});
+			const parsedBalanceData = await getTokenAccountBalanceResponse.json();
+			setTokenBalance(parsedBalanceData.result.value.uiAmount);
+		} catch (error) {
+			console.error("Error fetching tokens:", error);
+			setTokenBalance(0);
+		} finally {
+			setIsLoading(false);
+		}
 	}
 
 
@@ -124,7 +136,6 @@ function PrivateSales(props) {
 		});
 	};
 
-	const MINIMUM_TOKEN_REQUIREMENT = 100000;
 
 	useEffect(() => {
 		if (location.pathname === '/dashboard/celebrity-nfts') {
@@ -134,16 +145,6 @@ function PrivateSales(props) {
 		} else if (location.pathname === '/dashboard/projects') {
 			setTitle('Projects');
 		}
-		const interval2 = setInterval(() => {
-			if (connected) {
-				for (let i = 0; i < projIds.length; ++i) {
-					dispatch(loadLaunchInfo(projIds[i]));
-				}
-			}
-		}, 10000);
-		return () => {
-			clearInterval(interval2);
-		};
 	});
 
 	useEffect(() => {
@@ -159,6 +160,22 @@ function PrivateSales(props) {
 		};
 	});
 
+	useEffect(() => {
+		const checkEligibility = async () => {
+			setIsLoading(true);
+			if (connected && address) {
+				try {
+					await fetchTokens();
+				} catch (error) {
+					console.error("Error fetching token balance:", error);
+				}
+			}
+			setIsLoading(false);
+		};
+
+		checkEligibility();
+	}, [connected, address]);
+
 	projIds.forEach((val) => {
 		const launchCard = (
 			<Col lg={4} md={6}>
@@ -172,6 +189,24 @@ function PrivateSales(props) {
 			liveLaunches.push(launchCard);
 		else upcomingLaunches.push(launchCard);
 	});
+
+	const ConnectWalletMessage = () => (
+		<div className="message-container">
+			<h2 className="message-text">Please connect your wallet to access private sales</h2>
+		</div>
+	);
+
+	const InsufficientBalanceMessage = ({ balance }) => (
+		<div className="message-container">
+			<h2 className="message-text">Insufficient Token Balance</h2>
+			<p className="message-description">
+				You need to hold at least {MINIMUM_TOKEN_REQUIREMENT.toLocaleString()} tokens to access private sales.
+			</p>
+			<p className="message-description">
+				Your current balance: {balance.toLocaleString()} tokens
+			</p>
+		</div>
+	);
 
 	return (
 		<div className="main-layout">
@@ -207,7 +242,6 @@ function PrivateSales(props) {
 						{/* <ChristmasLogo mobile /> */}
 					</div>
 					<strong className="Header_title__2eSkT">{title}</strong>
-					<button onClick={() => fetchTokens()}>Check tokens</button>
 					<div className="Header_wallet__1DOlJ">
 						{connected ? (
 							<span className="header-wallet-balance">
@@ -246,23 +280,13 @@ function PrivateSales(props) {
 				</header>
 
 				{isLoading ? (
-					<div className="text-center mt-5">
-						<h2>Loading...</h2>
+					<div className="message-container">
+						<h2 className="message-text">Loading...</h2>
 					</div>
 				) : !connected ? (
-					<div className="text-center mt-5">
-						<h2>Please connect your wallet to access private sales</h2>
-					</div>
+					<ConnectWalletMessage />
 				) : tokenBalance < MINIMUM_TOKEN_REQUIREMENT ? (
-					<div className="text-center mt-5">
-						<h2>Insufficient Token Balance</h2>
-						<p>
-							You need to hold at least{' '}
-							{MINIMUM_TOKEN_REQUIREMENT.toLocaleString()} tokens to access
-							private sales.
-						</p>
-						<p>Your current balance: {tokenBalance.toLocaleString()} tokens</p>
-					</div>
+					<InsufficientBalanceMessage balance={tokenBalance} />
 				) : (
 					<>
 						<div className="project-banner-container">

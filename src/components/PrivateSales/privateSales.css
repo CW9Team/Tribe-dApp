@@ -269,3 +269,28 @@ a:hover {
   font-family: Rubik, sans-serif;
   font-size: 12px;
 }
+
+.message-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.message-text {
+  color: #000;
+  font-family: "Rubik", sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.message-description {
+  color: #666;
+  font-family: "Rubik", sans-serif;
+  font-size: 16px;
+  margin-bottom: 0.5rem;
+}
