@@ -3,7 +3,6 @@ import { Col, Container, Row } from 'react-bootstrap';
 import threeCharacters from '../../images/three_characters.png';
 import Cards from '../Cards/Cards';
 import Sidebar from '../sidebar/Sidebar';
-import UpcomingCards from '../UpcomingCards/UpcomingCards';
 import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadLaunchInfo } from '../../store/reducer/launch_reducer';
@@ -16,18 +15,25 @@ import connectLogo from '../../images/connect-logo.svg';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import Web3 from 'web3';
 import BN from 'bn.js';
-import { Connection, PublicKey, Transaction, SystemProgram, TransactionInstruction } from '@solana/web3.js';
+import {
+	Connection,
+	PublicKey,
+	Transaction,
+	SystemProgram,
+	TransactionInstruction,
+	LAMPORTS_PER_SOL,
+	ComputeBudgetProgram,
+} from '@solana/web3.js';
+import { getAssociatedTokenAddress, createAssociatedTokenAccountInstruction} from '@solana/spl-token';
+import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 const MINIMUM_TOKEN_REQUIREMENT = 100;
 
 const TIER_THRESHOLDS = {
 	TIER1: 300,
 	TIER2: 600,
-	TIER3: 700
+	TIER3: 700,
 };
 
-const TRIBE_TOKEN_MINT = 'YOUR_TRIBE_TOKEN_MINT_ADDRESS';
-const SOL_TOKEN_MINT = 'So11111111111111111111111111111111111111112';
-const LAMPORTS_PER_SOL = 1000000000;
 export const fetchAccount = createAsyncThunk(
 	'FetchAccount',
 	async (action, thunkAPI) => {
@@ -67,6 +73,7 @@ function PrivateSales(props) {
 	const [isLoading, setIsLoading] = useState(true);
 	const [tribeBalance, setTribeBalance] = useState(0);
 	const [isSwapping, setIsSwapping] = useState(false);
+	const [tokenAccount, setTokenAccount] = useState(null);
 
 	const liveLaunches = [],
 		completedLaunches = [],
@@ -80,52 +87,55 @@ function PrivateSales(props) {
 		(state) => state.web3,
 	);
 
-
 	async function fetchTokens() {
 		try {
 			setIsLoading(true);
-			const getTokenAccountsResponse = await fetch('https://mainnet.helius-rpc.com/?api-key=201ae82c-0179-4400-aa9f-1dd6ae8dde94', {
-				method: 'POST',
-				headers: {
-				  "Content-Type": "application/json"
-				},
-				body: JSON.stringify({
-				  "jsonrpc": "2.0",
-				  "id": 1,
-				  "method": "getTokenAccountsByOwner",
-				  "params": [
-					address,
-					{
-					  "programId": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+			const getTokenAccountsResponse = await fetch(
+				'https://mainnet.helius-rpc.com/?api-key=201ae82c-0179-4400-aa9f-1dd6ae8dde94',
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
 					},
-					{
-						'commitment': 'processed',
-					  "encoding": "base64"
-					}
-				  ]
-				}),
-			});
+					body: JSON.stringify({
+						jsonrpc: '2.0',
+						id: 1,
+						method: 'getTokenAccountsByOwner',
+						params: [
+							address,
+							{
+								programId: 'TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb',
+							},
+							{
+								commitment: 'processed',
+								encoding: 'base64',
+							},
+						],
+					}),
+				},
+			);
 			const parsedData = await getTokenAccountsResponse.json();
 			const tokenAccount = parsedData.result.value[0].pubkey;
-
-			const getTokenAccountBalanceResponse = await fetch('https://mainnet.helius-rpc.com/?api-key=201ae82c-0179-4400-aa9f-1dd6ae8dde94', {
-				method: 'POST',
-				headers: {
-				  "Content-Type": "application/json"
+			setTokenAccount(tokenAccount);
+			const getTokenAccountBalanceResponse = await fetch(
+				'https://mainnet.helius-rpc.com/?api-key=201ae82c-0179-4400-aa9f-1dd6ae8dde94',
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						jsonrpc: '2.0',
+						id: 1,
+						method: 'getTokenAccountBalance',
+						params: [tokenAccount],
+					}),
 				},
-				body: JSON.stringify({
-				  "jsonrpc": "2.0",
-				  "id": 1,
-				  "method": "getTokenAccountBalance",
-				  "params": [
-					tokenAccount
-				  ]
-				}),
-			});
+			);
 			const parsedBalanceData = await getTokenAccountBalanceResponse.json();
 			setTokenBalance(parsedBalanceData.result.value.uiAmount);
 		} catch (error) {
-			console.error("Error fetching tokens:", error);
+			console.error('Error fetching tokens:', error);
 			setTokenBalance(0);
 		} finally {
 			setIsLoading(false);
@@ -139,11 +149,15 @@ function PrivateSales(props) {
 		}
 		try {
 			setIsSwapping(true);
-			const connection = new Connection('https://mainnet.helius-rpc.com/?api-key=201ae82c-0179-4400-aa9f-1dd6ae8dde94');
+			const connection = new Connection('https://devnet.helius-rpc.com/?api-key=201ae82c-0179-4400-aa9f-1dd6ae8dde94');
 			const transaction = new Transaction();
-
+			const transferAmount = new BN(0.001 * LAMPORTS_PER_SOL);
+			const computeBudgetIx = ComputeBudgetProgram.setComputeUnitLimit({
+				units: 300000
+			});
+			transaction.add(computeBudgetIx);
 			const swapInstruction = new TransactionInstruction({
-				programId: new PublicKey('TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'),
+				programId: TOKEN_PROGRAM_ID,
 				keys: [
 					{
 						pubkey: new PublicKey(address),
@@ -156,32 +170,27 @@ function PrivateSales(props) {
 						isWritable: true,
 					},
 					{
-						pubkey: new PublicKey('So11111111111111111111111111111111111111112'),
-						isSigner: false,
-						isWritable: true,
-					},
-					{
 						pubkey: SystemProgram.programId,
 						isSigner: false,
 						isWritable: false,
 					}
 				],
 				data: Buffer.from([
-					...new Uint8Array([1]),
-                ...new BN(0.01 * LAMPORTS_PER_SOL).toArray('le', 8),
+					2,
+					...transferAmount.toArray('le', 8)
 				])
 			});
 
 			transaction.add(swapInstruction);
 			const { blockhash } = await connection.getLatestBlockhash();
 			console.log(blockhash);
-			
+
 			transaction.recentBlockhash = blockhash;
 			transaction.feePayer = new PublicKey(address);
 			const signedTransaction = await window.solana.signTransaction(transaction);
 			const signature = await connection.sendRawTransaction(signedTransaction.serialize());
 			await connection.confirmTransaction(signature);
-			console.log('Swap successful!', signature);			
+			console.log('Swap successful!', signature);
 			await fetchTokens();
 
 		} catch (error) {
@@ -190,7 +199,6 @@ function PrivateSales(props) {
 			setIsSwapping(false);
 		}
 	}
-
 
 	// HANDLERS
 	const getToggleStatus = (props) => {
@@ -203,7 +211,6 @@ function PrivateSales(props) {
 			maximumFractionDigits: dec,
 		});
 	};
-
 
 	useEffect(() => {
 		if (location.pathname === '/dashboard/celebrity-nfts') {
@@ -235,7 +242,7 @@ function PrivateSales(props) {
 				try {
 					await fetchTokens();
 				} catch (error) {
-					console.error("Error fetching token balance:", error);
+					console.error('Error fetching token balance:', error);
 				}
 			}
 			setIsLoading(false);
@@ -260,7 +267,9 @@ function PrivateSales(props) {
 
 	const ConnectWalletMessage = () => (
 		<div className="message-container">
-			<h2 className="message-text">Please connect your wallet to access private sales</h2>
+			<h2 className="message-text">
+				Please connect your wallet to access private sales
+			</h2>
 		</div>
 	);
 
@@ -268,7 +277,8 @@ function PrivateSales(props) {
 		<div className="message-container">
 			<h2 className="message-text">Insufficient Token Balance</h2>
 			<p className="message-description">
-				You need to hold at least {MINIMUM_TOKEN_REQUIREMENT.toLocaleString()} tokens to access private sales.
+				You need to hold at least {MINIMUM_TOKEN_REQUIREMENT.toLocaleString()}{' '}
+				tokens to access private sales.
 			</p>
 			<p className="message-description">
 				Your current balance: {balance.toLocaleString()} tokens
@@ -378,7 +388,7 @@ function PrivateSales(props) {
 								</div>
 							</div>
 						</div>
-						
+
 						{userTiers.includes(1) && (
 							<>
 								<Container fluid>
@@ -387,7 +397,8 @@ function PrivateSales(props) {
 											<div>
 												<h2 className="projects-launchTitle">TIER 1</h2>
 												<p className="tier-requirement">
-													Required Balance: {TIER_THRESHOLDS.TIER1.toLocaleString()} TRIBE
+													Required Balance:{' '}
+													{TIER_THRESHOLDS.TIER1.toLocaleString()} TRIBE
 												</p>
 											</div>
 										</Col>
@@ -407,7 +418,8 @@ function PrivateSales(props) {
 											<div>
 												<h2 className="projects-launchTitle">TIER 2</h2>
 												<p className="tier-requirement">
-													Required Balance: {TIER_THRESHOLDS.TIER2.toLocaleString()} TRIBE
+													Required Balance:{' '}
+													{TIER_THRESHOLDS.TIER2.toLocaleString()} TRIBE
 												</p>
 											</div>
 										</Col>
@@ -427,7 +439,8 @@ function PrivateSales(props) {
 											<div>
 												<h2 className="projects-launchTitle">TIER 3</h2>
 												<p className="tier-requirement">
-													Required Balance: {TIER_THRESHOLDS.TIER3.toLocaleString()} TRIBE
+													Required Balance:{' '}
+													{TIER_THRESHOLDS.TIER3.toLocaleString()} TRIBE
 												</p>
 											</div>
 										</Col>
@@ -443,8 +456,8 @@ function PrivateSales(props) {
 							<div className="message-container">
 								<h2 className="message-text">Higher Tiers Locked</h2>
 								<p className="message-description">
-									Hold more TRIBE tokens to unlock higher tiers.
-									Next tier requires {TIER_THRESHOLDS.TIER2.toLocaleString()} TRIBE.
+									Hold more TRIBE tokens to unlock higher tiers. Next tier
+									requires {TIER_THRESHOLDS.TIER2.toLocaleString()} TRIBE.
 								</p>
 							</div>
 						)}
