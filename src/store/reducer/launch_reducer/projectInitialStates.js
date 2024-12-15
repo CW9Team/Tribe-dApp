@@ -3,7 +3,8 @@ import GetBooty from "../../../images/getbooty.png";
 import SmallGetBooty from "../../../images/smallBooty.png";
 import ElonDoge from "../../../images/elon-doge.png";
 import SmallElonDoge from "../../../images/smallElon.png";
-
+import SolanaLogo from "../../../images/solanaLogoMark.png";
+import SolanaBackground from "../../../images/solanaGradient.jpg";
 export const projIds = ["booty", "booty2", "elondoge"];
 
 //Initial values of the IDO, used when metamask is not connected.
@@ -22,7 +23,7 @@ export const projState = {
     auditStatus: "Passed", //Constant
     saleInUsd: 75000, //Constant
     totalRewardTokens: 8712121212121,
-    totalTokensInBnb: 234,
+    totalTokensInBnb: 1,
     initialSupply: 4500000000000,
     totalSupply: 69000000000000,
     marketCap: 39150, //Constant
@@ -30,13 +31,13 @@ export const projState = {
     startTime: 1628780400,
     tokenUrl: memepad.prefix + memepad.booty.tokenAddress, //Constant
     address: memepad.booty.tokenAddress, //Constant
-    name: "Booty Club", //Constant
-    symbol: "BOOTY",
+    name: "Solana", //Constant
+    symbol: "SOL",
     decimals: 9,
     kyc: "No", //Constant
-    image: GetBooty, //Constant
-    smallImage: SmallGetBooty, //Constant
-    description: "Booty Description", //Constant
+    image: SolanaBackground, //Constant
+    smallImage: SolanaLogo, //Constant
+    description: "a crypto computing platform that aims to achieve high transaction speeds without sacrificing decentralization", //Constant
   },
   booty2: {
     launchContract: null,
@@ -50,7 +51,7 @@ export const projState = {
     auditStatus: "Passed", //Constant
     saleInUsd: 75000, //Constant
     totalRewardTokens: 8712121212121,
-    totalTokensInBnb: 234,
+    totalTokensInBnb: 1,
     initialSupply: 4500000000000,
     totalSupply: 69000000000000,
     marketCap: 39150, //Constant
@@ -58,13 +59,13 @@ export const projState = {
     startTime: 1628780400,
     tokenUrl: memepad.prefix + memepad.booty2.tokenAddress, //Constant
     address: memepad.booty2.tokenAddress, //Constant
-    name: "Booty2 Club", //Constant
-    symbol: "BOOTY2",
+    name: "Solana", //Constant
+    symbol: "SOL",
     decimals: 9,
     kyc: "No", //Constant
-    image: GetBooty, //Constant
-    smallImage: SmallGetBooty, //Constant
-    description: "Booty2 Description", //Constant
+    image: SolanaBackground, //Constant
+    smallImage: SolanaLogo, //Constant
+    description: "a crypto computing platform that aims to achieve high transaction speeds without sacrificing decentralization",
   },
   elondoge: {
     launchContract: null,

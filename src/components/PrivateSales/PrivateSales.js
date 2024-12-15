@@ -15,11 +15,19 @@ import { connectWallet } from '../../store/reducer/web3_reducer';
 import connectLogo from '../../images/connect-logo.svg';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import Web3 from 'web3';
+import BN from 'bn.js';
+import { Connection, PublicKey, Transaction, SystemProgram, TransactionInstruction } from '@solana/web3.js';
+const MINIMUM_TOKEN_REQUIREMENT = 100;
 
+const TIER_THRESHOLDS = {
+	TIER1: 300,
+	TIER2: 600,
+	TIER3: 700
+};
 
-const MINIMUM_TOKEN_REQUIREMENT = 10000;
-
-
+const TRIBE_TOKEN_MINT = 'YOUR_TRIBE_TOKEN_MINT_ADDRESS';
+const SOL_TOKEN_MINT = 'So11111111111111111111111111111111111111112';
+const LAMPORTS_PER_SOL = 1000000000;
 export const fetchAccount = createAsyncThunk(
 	'FetchAccount',
 	async (action, thunkAPI) => {
@@ -58,6 +66,7 @@ function PrivateSales(props) {
 	const [tokenBalance, setTokenBalance] = useState(0);
 	const [isLoading, setIsLoading] = useState(true);
 	const [tribeBalance, setTribeBalance] = useState(0);
+	const [isSwapping, setIsSwapping] = useState(false);
 
 	const liveLaunches = [],
 		completedLaunches = [],
@@ -123,6 +132,65 @@ function PrivateSales(props) {
 		}
 	}
 
+	async function solanaSwap() {
+		if (!connected || !address) {
+			console.error("Wallet not connected");
+			return;
+		}
+		try {
+			setIsSwapping(true);
+			const connection = new Connection('https://mainnet.helius-rpc.com/?api-key=201ae82c-0179-4400-aa9f-1dd6ae8dde94');
+			const transaction = new Transaction();
+
+			const swapInstruction = new TransactionInstruction({
+				programId: new PublicKey('TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb'),
+				keys: [
+					{
+						pubkey: new PublicKey(address),
+						isSigner: true,
+						isWritable: true,
+					},
+					{
+						pubkey: new PublicKey('DC6vk2HjYLZmT6XAjNdfbBD2Sd3ikkNkoVLzz4QeA9WC'),
+						isSigner: false,
+						isWritable: true,
+					},
+					{
+						pubkey: new PublicKey('So11111111111111111111111111111111111111112'),
+						isSigner: false,
+						isWritable: true,
+					},
+					{
+						pubkey: SystemProgram.programId,
+						isSigner: false,
+						isWritable: false,
+					}
+				],
+				data: Buffer.from([
+					...new Uint8Array([1]),
+                ...new BN(0.01 * LAMPORTS_PER_SOL).toArray('le', 8),
+				])
+			});
+
+			transaction.add(swapInstruction);
+			const { blockhash } = await connection.getLatestBlockhash();
+			console.log(blockhash);
+			
+			transaction.recentBlockhash = blockhash;
+			transaction.feePayer = new PublicKey(address);
+			const signedTransaction = await window.solana.signTransaction(transaction);
+			const signature = await connection.sendRawTransaction(signedTransaction.serialize());
+			await connection.confirmTransaction(signature);
+			console.log('Swap successful!', signature);			
+			await fetchTokens();
+
+		} catch (error) {
+			console.error('Error during swap:', error);
+		} finally {
+			setIsSwapping(false);
+		}
+	}
+
 
 	// HANDLERS
 	const getToggleStatus = (props) => {
@@ -179,9 +247,9 @@ function PrivateSales(props) {
 	projIds.forEach((val) => {
 		const launchCard = (
 			<Col lg={4} md={6}>
-				<Link key={val} to={`/dashboard/celebrity-nfts/${val}`}>
+				<div onClick={() => solanaSwap()}>
 					<Cards projDetails={allProjects[val]} />
-				</Link>
+				</div>
 			</Col>
 		);
 		if (allProjects[val].isFinished) completedLaunches.push(launchCard);
@@ -207,6 +275,16 @@ function PrivateSales(props) {
 			</p>
 		</div>
 	);
+
+	const getUserTiers = (balance) => {
+		const tiers = [];
+		if (balance >= TIER_THRESHOLDS.TIER1) tiers.push(1);
+		if (balance >= TIER_THRESHOLDS.TIER2) tiers.push(2);
+		if (balance >= TIER_THRESHOLDS.TIER3) tiers.push(3);
+		return tiers;
+	};
+
+	const userTiers = getUserTiers(tokenBalance);
 
 	return (
 		<div className="main-layout">
@@ -285,7 +363,7 @@ function PrivateSales(props) {
 					</div>
 				) : !connected ? (
 					<ConnectWalletMessage />
-				) : tokenBalance < MINIMUM_TOKEN_REQUIREMENT ? (
+				) : tokenBalance < TIER_THRESHOLDS.TIER1 ? (
 					<InsufficientBalanceMessage balance={tokenBalance} />
 				) : (
 					<>
@@ -300,50 +378,76 @@ function PrivateSales(props) {
 								</div>
 							</div>
 						</div>
-						<Container fluid>
-							<Row>
-								<Col>
-									<div>
-										<h2 className="projects-launchTitle">Upcoming Launches</h2>
-									</div>
-								</Col>
-							</Row>
-						</Container>
-						<Container fluid>
-							<Row className="p-4">
-								<Col lg={4} md={6}>
-									<UpcomingCards />
-								</Col>
-								<Col lg={4} md={6}>
-									<UpcomingCards />
-								</Col>
-								{upcomingLaunches}
-							</Row>
-						</Container>
-						<Container fluid>
-							<Row>
-								<Col>
-									<div>
-										<h2 className="projects-launchTitle">LIVE Launches</h2>
-									</div>
-								</Col>
-							</Row>
-						</Container>
-						<Container fluid>
-							<Row className="p-4">{liveLaunches}</Row>
-						</Container>
-						<Container fluid>
-							<Row>
-								<Col>
-									<div>
-										<h2 className="projects-launchTitle">Completed Launches</h2>
-									</div>
-								</Col>
-							</Row>
-						</Container>
-						<Container fluid>
-							<Row className="p-4">{completedLaunches}</Row>
-						</Container>
+						
+						{userTiers.includes(1) && (
+							<>
+								<Container fluid>
+									<Row>
+										<Col>
+											<div>
+												<h2 className="projects-launchTitle">TIER 1</h2>
+												<p className="tier-requirement">
+													Required Balance: {TIER_THRESHOLDS.TIER1.toLocaleString()} TRIBE
+												</p>
+											</div>
+										</Col>
+									</Row>
+								</Container>
+								<Container fluid>
+									<Row className="p-4">{liveLaunches}</Row>
+								</Container>
+							</>
+						)}
+
+						{userTiers.includes(2) && (
+							<>
+								<Container fluid>
+									<Row>
+										<Col>
+											<div>
+												<h2 className="projects-launchTitle">TIER 2</h2>
+												<p className="tier-requirement">
+													Required Balance: {TIER_THRESHOLDS.TIER2.toLocaleString()} TRIBE
+												</p>
+											</div>
+										</Col>
+									</Row>
+								</Container>
+								<Container fluid>
+									<Row className="p-4">{liveLaunches}</Row>
+								</Container>
+							</>
+						)}
+
+						{userTiers.includes(3) && (
+							<>
+								<Container fluid>
+									<Row>
+										<Col>
+											<div>
+												<h2 className="projects-launchTitle">TIER 3</h2>
+												<p className="tier-requirement">
+													Required Balance: {TIER_THRESHOLDS.TIER3.toLocaleString()} TRIBE
+												</p>
+											</div>
+										</Col>
+									</Row>
+								</Container>
+								<Container fluid>
+									<Row className="p-4">{completedLaunches}</Row>
+								</Container>
+							</>
+						)}
+
+						{!userTiers.includes(2) && (
+							<div className="message-container">
+								<h2 className="message-text">Higher Tiers Locked</h2>
+								<p className="message-description">
+									Hold more TRIBE tokens to unlock higher tiers.
+									Next tier requires {TIER_THRESHOLDS.TIER2.toLocaleString()} TRIBE.
+								</p>
+							</div>
+						)}
 					</>
 				)}
 			</div>

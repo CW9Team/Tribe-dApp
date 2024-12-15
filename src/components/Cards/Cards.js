@@ -39,9 +39,9 @@ function Cards(props) {
                         <div className="img-txt">
                             <div>
                                 <img src={!projDetails.smallImage ? whenNoSmallImage : projDetails.smallImage} alt="" width='60' height='60' />
-                                <span className='small-2nd-div-img'>
+                                {/* <span className='small-2nd-div-img'>
                                     <img src={eth} alt="" width='20' height='20' />
-                                </span>
+                                </span> */}
                             </div>
                             <div className='only-text mt-2' >
                                 <div>{projDetails.name}</div>
@@ -58,7 +58,7 @@ function Cards(props) {
                                     {`${fixDecimals(now, 0)}%`}
                                 </div>
                                 <div className='stats-label'>
-                                    {`${fixDecimals(projDetails.soldAmountInBnb, 1)} / ${fixDecimals(projDetails.totalTokensInBnb, 1)} BNB`}
+                                    {`${fixDecimals(projDetails.soldAmountInBnb, 1)} / ${fixDecimals(projDetails.totalTokensInBnb, 1)} SOL`}
                                 </div>
                             </div>
                         </div>
